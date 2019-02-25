@@ -84,15 +84,12 @@ class Browser {
           done();
         }
       });
-      this.browser.webContents.once(
-        "did-fail-load",
-        (event, errorCode, desc, url) => {
-          if (!sent) {
-            sent = true;
-            err(`Failed to navigate to '${url}' (${desc})`);
-          }
+      this.browser.webContents.once("did-fail-load", () => {
+        if (!sent) {
+          sent = true;
+          done();
         }
-      );
+      });
       this.browser.loadURL(url, options);
     });
   }
@@ -102,7 +99,7 @@ class Browser {
     if (reason)
       err.stack += `\n----------\nCaused by:\n${
         reason.stack ? reason.stack : reason
-        }`;
+      }`;
     let step;
     while ((step = this._queue.shift())) {
       if (step[3]) {
@@ -222,7 +219,7 @@ class Browser {
   }
 }
 
-Browser.new = function (...args) {
+Browser.new = function(...args) {
   return new Browser(...args);
 };
 
