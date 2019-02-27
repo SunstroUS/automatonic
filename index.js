@@ -159,6 +159,27 @@ class Browser {
     );
   }
 
+  clickOnCoords(options = {}) {
+    console.log(options);
+    if (options.x == "" || options.y == "")
+      throw new Error(`clickOnCoords: Missing one or more coordinates`);
+
+    this.browser.webContents.sendInputEvent({
+      type: "mouseDown",
+      button: "left",
+      clickCount: 1,
+      x: options.x,
+      y: options.y
+    });
+    this.browser.webContents.sendInputEvent({
+      type: "mouseUp",
+      button: "left",
+      clickCount: 1,
+      x: options.x,
+      y: options.y
+    });
+  }
+
   type(selector, str, options = {}) {
     return waitForQueue(
       this,
